@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Website</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ==== POPUP STYLE ==== */
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .popup.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .popup-content {
+      background: #1e1e2f;
+      color: #fff;
+      padding: 35px 45px;
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+      animation: popIn 0.6s ease, floating 3s ease-in-out infinite;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes floating {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    #closePopup {
+      background-color: #00adb5;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      margin-top: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    #closePopup:hover {
+      background-color: #00c6d3;
+      transform: scale(1.05);
+    }
+
+    /* ==== LAYOUT DASAR ==== */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      color: #222;
+    }
+
+    header.navbar {
+      background: #111;
+      color: #fff;
+      padding: 12px 0;
+    }
+
+    .navbar .container {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: #ddd;
+      text-decoration: none;
+      margin-left: 16px;
+      transition: color 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #fff;
+    }
+
+    .hero {
+      text-align: center;
+    }
+
+    .webpaper-img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      filter: brightness(70%);
+    }
+
+    /* ==== FITUR UTAMA ==== */
+    .features {
+      max-width: 1100px;
+      margin: 40px auto;
+      text-align: center;
+    }
+
+    .features h2 {
+      margin-bottom: 25px;
+    }
+
+    .grid {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.25s, box-shadow 0.25s;
+      width: 250px;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .card h3 {
+      margin: 10px 0 15px;
+    }
+
+    footer {
+      background: #111;
+      color: #ccc;
+      text-align: center;
+      padding: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        flex-direction: column;
+        align-items: center;
+      }
+      .card {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar">
+    <div class="container">
+      <h1 class="logo">My Website</h1>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#features">Fitur</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <img src="images/webpaper.jpg" alt="webpaper" class="webpaper-img">
+  </section>
+
+  <!-- ===== FITUR DAN PORTAL ===== -->
+  <section id="features" class="features">
+    <h2>Fitur & Portal</h2>
+    <div class="grid">
+
+      <!-- Fitur -->
+      <div class="card" onclick="openPage('pages/kalkulator.html')">
+        <img src="images/kalkulator.png" alt="Kalkulator">
+        <h3>Kalkulator</h3>
+      </div>
+
+      <div class="card" onclick="openPage('pages/converter.html')">
+        <img src="images/globe.png" alt="Converter">
+        <h3>Converter</h3>
+      </div>
+
+      <div class="card" onclick="openPage('pages/grafik.html')">
+        <img src="images/grafik.jpg" alt="Graphix">
+        <h3>Grafik</h3>
+      </div>
+
+      <div class="card" onclick="openPage('pages/game.html')">
+        <img src="images/click.png" alt="Click Game">
+        <h3>Game</h3>
+      </div>
+
+      <!-- Portal Biodata -->
+      <div class="card" onclick="openPage('pages/aboutmeg/bio.html')">
+        <img src="images/4.png" alt="Grego">
+        <h3>Grego</h3>
+      </div>
+
+      <div class="card" onclick="openPage('pages/aboutmen/bio2.html')">
+        <img src="images/3.png" alt="Faliqul">
+        <h3>Faliqul</h3>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    © 2025 My Website - Made with ❤️ by Grego
+  </footer>
+
+  <!-- ===== POPUP INTERAKTIF ===== -->
+  <div id="welcomePopup" class="popup">
+    <div class="popup-content">
+      <h2>Halo penjelajah! 👋</h2>
+      <p>Selamat datang di website gweh, nikmatin fiturnya santai aja 😎</p>
+      <button id="closePopup">Oke, lanjut!</button>
+    </div>
+  </div>
+
+  <script>
+    function openPage(url) {
+      window.location.href = url;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const popup = document.getElementById("welcomePopup");
+      const closeBtn = document.getElementById("closePopup");
+      const popupShown = sessionStorage.getItem("popupShown");
+
+      if (!popupShown) {
+        setTimeout(() => popup.classList.add("show"), 400);
+        setTimeout(() => {
+          popup.classList.remove("show");
+          sessionStorage.setItem("popupShown", "true");
+        }, 4500);
+      }
+
+      closeBtn.addEventListener("click", () => {
+        popup.classList.remove("show");
+        sessionStorage.setItem("popupShown", "true");
+      });
+    });
+  </script>
+</body>
+</html>

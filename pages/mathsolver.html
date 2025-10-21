@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Solver</title>
+  <link rel="stylesheet" href="style-mathsolver.css">
+</head>
+<body>
+  <div class="solver-container">
+    <h1>Math Solver</h1>
+    <input type="text" id="equation" placeholder="Masukkan persamaan, contoh: 2x + 3 = 9">
+    <button id="solve-btn">Hitung</button>
+    <p id="result">Hasil akan muncul di sini...</p>
+
+    <div class="nav-buttons">
+      <a href="kalkulator.html" class="btn">🔢 Kembali ke Kalkulator</a>
+      <a href="../index.html" class="btn">🏠 Menu Utama</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('solve-btn').addEventListener('click', () => {
+      const input = document.getElementById('equation').value.trim();
+      const result = document.getElementById('result');
+
+      if (input === "") {
+        result.textContent = "⚠️ Masukkan persamaan dulu!";
+        return;
+      }
+
+      // Cek apakah input mengandung tanda sama dengan
+      if (input.includes('=')) {
+        try {
+          // Pisahkan kiri dan kanan dari tanda "="
+          const [left, right] = input.split('=');
+
+          if (!left || !right) {
+            result.textContent = "⚠️ Format salah. Contoh: 2x + 3 = 9";
+            return;
+          }
+
+          // Hapus spasi dan cari koefisien
+          const cleanLeft = left.replace(/\s+/g, "");
+          const match = cleanLeft.match(/([+-]?\d*)x([+-]?\d+)?/);
+
+          if (!match) {
+            result.textContent = "❌ Tidak ada variabel x yang bisa diselesaikan.";
+            return;
+          }
+
+          // Ambil koefisien dan konstanta
+          let a = match[1];
+          let b = match[2] || 0;
+
+          a = a === "" || a === "+" ? 1 : (a === "-" ? -1 : Number(a));
+          b = Number(b);
+
+          const c = Number(right.replace(/\s+/g, ""));
+
+          // Rumus: a*x + b = c  →  x = (c - b) / a
+          const x = (c - b) / a;
+
+          result.textContent = `✅ Hasil: x = ${x}`;
+        } catch (e) {
+          result.textContent = "❌ Error: persamaan tidak bisa dihitung.";
+        }
+      } else {
+        // Kalau bukan persamaan, pakai eval() untuk operasi biasa
+        try {
+          result.textContent = "Hasil: " + eval(input);
+        } catch {
+          result.textContent = "Input tidak valid!";
+        }
+      }
+    });
+  </script>
+</body>
+</html>

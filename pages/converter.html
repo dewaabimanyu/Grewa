@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit Converter</title>
+  <link rel="stylesheet" href="style-converter.css">
+</head>
+<body>
+  <div class="converter-container">
+    <h1>Unit Converter</h1>
+
+    <label for="type">Pilih Jenis Konversi:</label>
+    <select id="type">
+      <option value="length">Panjang</option>
+      <option value="weight">Berat</option>
+      <option value="temperature">Suhu</option>
+      <option value="volume">Volume</option>
+    </select>
+
+    <div class="input-group">
+      <input type="number" id="input-value" placeholder="Masukkan nilai">
+      <select id="from-unit"></select>
+      <span>→</span>
+      <select id="to-unit"></select>
+    </div>
+
+    <button id="convert-btn">Konversi</button>
+    <p id="result">Hasil akan muncul di sini...</p>
+
+   <div class="nav-buttons">
+  <a href="../index.html" class="btn">🏠 Menu Utama</a>
+</div>
+  </div>
+
+  <script>
+    const typeSelect = document.getElementById("type");
+    const fromSelect = document.getElementById("from-unit");
+    const toSelect = document.getElementById("to-unit");
+    const result = document.getElementById("result");
+
+    const units = {
+      length: { m: 1, cm: 0.01, km: 1000 },
+      weight: { g: 1, kg: 1000, lb: 453.592 },
+      temperature: { C: "C", F: "F", K: "K" },
+      volume: { ml: 0.001, l: 1, gal: 3.785 }
+    };
+
+    function updateUnits() {
+      const type = typeSelect.value;
+      fromSelect.innerHTML = "";
+      toSelect.innerHTML = "";
+      Object.keys(units[type]).forEach(u => {
+        fromSelect.innerHTML += `<option value="${u}">${u}</option>`;
+        toSelect.innerHTML += `<option value="${u}">${u}</option>`;
+      });
+    }
+
+    typeSelect.addEventListener("change", updateUnits);
+    updateUnits();
+
+    document.getElementById("convert-btn").addEventListener("click", () => {
+      const type = typeSelect.value;
+      const value = parseFloat(document.getElementById("input-value").value);
+      const from = fromSelect.value;
+      const to = toSelect.value;
+
+      if (isNaN(value)) {
+        result.textContent = "Masukkan nilai yang valid!";
+        return;
+      }
+
+      let output;
+
+      if (type === "temperature") {
+        if (from === to) output = value;
+        else if (from === "C" && to === "F") output = value * 9/5 + 32;
+        else if (from === "F" && to === "C") output = (value - 32) * 5/9;
+        else if (from === "C" && to === "K") output = value + 273.15;
+        else if (from === "K" && to === "C") output = value - 273.15;
+        else if (from === "F" && to === "K") output = (value - 32) * 5/9 + 273.15;
+        else if (from === "K" && to === "F") output = (value - 273.15) * 9/5 + 32;
+      } else {
+        output = value * (units[type][from] / units[type][to]);
+      }
+
+      result.textContent = `Hasil: ${output} ${to}`;
+    });
+  </script>
+</body>
+</html>

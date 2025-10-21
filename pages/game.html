@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Click Reaction Game</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at top left, #0b2a3d, #081e2b);
+      font-family: "Poppins", sans-serif;
+      color: #fff;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .game-container {
+      position: relative;
+      z-index: 2;
+      width: 420px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      padding: 40px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .game-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 255, 160, 0.4);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin: 6px 0;
+    }
+
+    #circle {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #00ffae;
+      box-shadow: 0 0 25px #00ffae;
+      display: none;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      z-index: 1;
+    }
+
+    #circle:hover {
+      transform: scale(1.1);
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 15px;
+      background: #00ffae;
+      color: #000;
+      padding: 10px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #00ffaecc;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>⚡ Click Reaction Game</h1>
+    <p>Klik lingkaran secepat mungkin!</p>
+    <p id="message">Tunggu...</p>
+    <p id="score">Skor: 0</p>
+    <a href="../index.html" class="btn">🏠 Kembali ke Menu Utama</a>
+  </div>
+
+  <div id="circle"></div>
+
+  <script>
+    const circle = document.getElementById("circle"); // Lingkaran yang muncul
+    const message = document.getElementById("message"); // Pesan status
+    const scoreText = document.getElementById("score"); // Teks skor
+    let score = 0, startTime, timeout; // Skor, waktu mulai, dan timeout
+
+    // Fungsi untuk menampilkan lingkaran setelah delay acak
+    function randomDelay() { 
+      const delay = Math.floor(Math.random() * 500) + 500; // 1–4 detik
+      message.textContent = "Tunggu..."; // Update pesan
+      circle.style.display = "none"; // Sembunyikan lingkaran
+
+      // Pastikan lingkaran tidak muncul di area game-container
+      timeout = setTimeout(() => { 
+        const box = document.querySelector(".game-container").getBoundingClientRect(); // Dapatkan posisi game-container
+        const circleSize = 80; // Ukuran lingkaran
+
+        let top, left; // Posisi lingkaran
+        do {
+          top = Math.random() * (window.innerHeight - circleSize - 30); // 30px margin bawah
+          left = Math.random() * (window.innerWidth - circleSize - 30); // 30px margin kanan
+        } while (
+          top + circleSize > box.top - 20 && // Cek tabrakan dengan game-container
+          top < box.bottom + 20 && // Tambah margin 20px
+          left + circleSize > box.left - 20 && // Tambah margin 20px
+          left < box.right + 20 // Tambah margin 20px
+        );
+
+        circle.style.top = `${top}px`; // Set posisi vertikal
+        circle.style.left = `${left}px`; // Set posisi horizontal
+        circle.style.display = "block"; // Tampilkan lingkaran
+        startTime = new Date().getTime(); // Catat waktu mulai
+      }, delay); // Akhiri setTimeout
+    }
+
+    circle.addEventListener("click", () => { 
+      const reactionTime = (new Date().getTime() - startTime) / 1000;
+      score++;
+      message.textContent = `Cepat klik! (${reactionTime}s)`;
+      scoreText.textContent = `Skor: ${score}`;
+      circle.style.display = "none";
+      clearTimeout(timeout);
+      setTimeout(randomDelay, 600);
+    });
+
+    randomDelay();
+  </script>
+</body>
+</html>

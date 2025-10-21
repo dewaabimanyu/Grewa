@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grafik Interaktif</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #2b2d42, #4b4e6d);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .graph-container {
+      width: 90%;
+      max-width: 800px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .input-box {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .input-box input {
+      width: 60%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+    }
+
+    .input-box button {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      background-color: #00adb5;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .input-box button:hover {
+      transform: scale(1.05);
+      background-color: #00c6d3;
+    }
+
+    .result-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 15px;
+      transition: 0.3s ease;
+    }
+
+    .result-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+
+    .nav-buttons {
+      margin-top: 20px;
+    }
+
+    .btn {
+      text-decoration: none;
+      color: #fff;
+      background-color: #00adb5;
+      padding: 10px 20px;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #00c6d3;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="graph-container">
+    <h1>📊 Grafik Interaktif</h1>
+
+    <div class="input-box">
+      <input type="text" id="function-input" placeholder="Masukkan fungsi, contoh: x**2 + 3*x - 5">
+      <button id="plot-btn">Plot</button>
+    </div>
+
+    <div class="result-box">
+      <canvas id="graphCanvas"></canvas>
+    </div>
+
+    <div class="nav-buttons">
+      <a href="../index.html" class="btn">🏠 Kembali ke Menu Utama</a>
+    </div>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('graphCanvas').getContext('2d'); // Ambil konteks graphcanvas
+    let chart; // Deklarasi variabel chart
+
+    // Fungsi untuk mem-plot grafik
+    document.getElementById('plot-btn').addEventListener('click', () => { // Ketika tombol plot diklik
+      const input = document.getElementById('function-input').value; // Ambil input fungsi
+      const xValues = [], yValues = []; // Menginput nilai x dan y
+
+      // Generate x and y values
+      try {
+        for (let x = -10; x <= 10; x += 0.5) { // Rentang x dari -10 hingga 10
+          xValues.push(x); // Menyimpan nilai x
+          const y = eval(input.replaceAll('x', `(${x})`)); // Evaluasi fungsi untuk nilai x
+          yValues.push(y); // Menyimpan nilai y
+        }
+
+        // Hapus grafik lama jika ada
+        if (chart) chart.destroy();
+
+        // Buat grafik baru
+        chart = new Chart(ctx, { 
+          type: 'line',
+          data: {
+            labels: xValues, // Nilai x
+            datasets: [{ // Dataset untuk grafik
+              label: `y = ${input}`, // Label grafik
+              data: yValues, // Nilai y
+              borderWidth: 2, 
+              borderColor: 'rgba(255,255,255,0.9)',
+              pointRadius: 0,
+              fill: false, 
+              tension: 0.2 
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: {
+                title: { display: true, text: 'x', color: '#fff' },
+                ticks: { color: '#fff' },
+                grid: { color: 'rgba(255,255,255,0.1)' }
+              },
+              y: {
+                title: { display: true, text: 'y', color: '#fff' },
+                ticks: { color: '#fff' },
+                grid: { color: 'rgba(255,255,255,0.1)' }
+              }
+            },
+            plugins: {
+              legend: {
+                labels: { color: '#fff' }
+              }
+            }
+          }
+        });
+        // Peringatan kesalahan input fungsi
+      } catch {
+        alert("Input fungsi tidak valid!");
+      }
+    });
+  </script>
+</body>
+</html>
